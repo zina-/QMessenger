@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="/Scripts/jquery-2.1.0.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.0.3.min.js"></script>
+    <script src="/signalr/hubs"></script>
+</head>
+<body>
+    <div id="cont-div">
+        <ul id="cont"></ul>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            var lobbyHub = $.connection.lobbyHub;
+
+            lobbyHub.client.notify = function (connectionId, userId) {
+                var display = connectionId + '|' + userId;
+                $('#cont').append('<li>' + display + '</li>');
+            };
+
+            $.connection.hub.start().done(function () {
+                //lobbyHub.server.signalToConnection();
+            });
+        });
+    </script>
+</body>
+</html>
