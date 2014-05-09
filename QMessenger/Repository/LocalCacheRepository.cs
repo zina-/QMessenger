@@ -1,6 +1,7 @@
 ﻿using QMessenger.Models;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace QMessenger.Repository
 {
@@ -61,6 +62,26 @@ namespace QMessenger.Repository
         {
             LocalCache value;
             localRepo.TryRemove(userId, out value);
+        }
+
+        public List<string> TryRepositoryGetConnectionId(string userId)
+        {
+            LocalCache value;
+            if (localRepo.TryGetValue(userId, out value))
+            {
+                return value.ConnectionIdCollection;
+            }
+            throw new Exception("Failed to TryGetValue");
+        }
+
+        public User TryRepositoryGetUser(string userId)
+        {
+            LocalCache value;
+            if (localRepo.TryGetValue(userId, out value))
+            {
+                return value.UserInfo;
+            }
+            throw new Exception("Failed to TryGetValue");
         }
     }
 }

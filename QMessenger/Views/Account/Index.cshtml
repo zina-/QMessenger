@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="/Scripts/jquery-2.1.0.min.js"></script>
+    <script src="/Scripts/angular.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+
+    <script src="/Apps/Account/login.js"></script>
+</head>
+<body ng-app="loginApp">
+    <div ng-controller="loginController">
+        <div>
+            <span>{{alert}}</span>
+        </div>
+        <div>
+            <input type="email" placeholder="Email ID" ng-model="account.emailId" />
+        </div>
+        <div>
+            <input type="password" placeholder="Password" ng-model="account.passwordHash" />
+        </div>
+        <div>
+            <button type="button" ng-click="loginAjax()">Login</button>
+        </div>
+    </div>
+</body>
+</html>

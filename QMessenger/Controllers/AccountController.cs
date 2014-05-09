@@ -1,13 +1,17 @@
 ﻿using QMessenger.Repository;
 using System.Web.Mvc;
 using System.Web.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace QMessenger.Controllers
 {
     public class AccountController : Controller
     {
         // GET: Account
-        public ActionResult Login()
+        public ActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -17,8 +21,7 @@ namespace QMessenger.Controllers
         }
 
         [HttpPost]
-        [ActionName("Login")]
-        public ActionResult DoLogin(string userId, string passwordHash)
+        public ActionResult Login(string userId, string passwordHash)
         {
             if (ModelState.IsValid)
             {
@@ -42,6 +45,33 @@ namespace QMessenger.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult LoginAjax(string emailId, string passwordHash)
+        {
+            if (ModelState.IsValid)
+            {
+                using (RemoteMongoRepository remoteRepo = new RemoteMongoRepository())
+                {
+                    Models.User user = remoteRepo.GetUserByIdAndPasswordHash(emailId, passwordHash);
+
+                    if (user != null)
+                    {
+                        if (LocalCacheRepository.Instance.TryRepositoryAdd(emailId, user))
+                        {
+                            FormsAuthentication.SetAuthCookie(emailId, true);
+                        }
+                        return Json(true);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+            }
+
+            return Json(false);
         }
 
         [HttpPost]

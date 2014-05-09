@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Microsoft.AspNet.SignalR;
 using QMessenger.Repository;
 using System.Threading.Tasks;
 
@@ -14,8 +18,10 @@ namespace QMessenger.Hubs
 
             LocalCacheRepository.Instance.TryRepositoryAdd(userId, connectionId);
 
-            Clients.Others.notify(connectionId, userId);
+            //Clients.Others.notify(connectionId, userId);
             Clients.Caller.notify(connectionId, userId);
+
+            Clients.Caller.notifyUserInfo(LocalCacheRepository.Instance.TryRepositoryGetUser(userId));
 
             return base.OnConnected();
         }
